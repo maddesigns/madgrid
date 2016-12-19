@@ -1,0 +1,128 @@
+
+// Grid System
+$fixedsizes: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000; //, 236, 768;
+$flexsizes: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 25, 75;
+$activate-flexgrid-breakpoint: 600px; // breakpoint where flexbox is active
+$fixbugs: true;
+$gutter: 1rem;
+$stretch-only-childs: true;
+
+.col {
+	@if $gutter != 0 {
+		padding: ($gutter / 2);
+	}
+}
+
+@media (min-width: $activate-flexgrid-breakpoint) {
+
+	.row,
+	.column {
+		display: flex;
+		height: 100%; /* default way for 100% height flex-items children */
+
+	}
+
+	.column {
+		flex-direction: column;
+	}
+
+	.col {
+		flex: 1 0 0%;
+		min-width: min-content;
+
+		@if $stretch-only-childs {
+			&:only-child {
+				flex-basis: 100%;
+
+				@if $fixbugs {
+					width: 100%;     // fixed Safari
+					max-width: 100%; // fixed IE10
+				}
+			}
+		}
+	}
+
+	.has-nested-grid {
+		border: none;
+
+		> * {
+			@if $gutter != 0 {
+				margin-left: ($gutter / -2);
+				margin-right: ($gutter / -2);
+			}
+		}
+
+		/* fallback for 100% height flex-items children (Safari, Android, IE) */
+		@if $fixbugs {
+			display: flex;
+			flex-direction: column;
+
+			> * {
+				flex-grow: 1;
+			}
+		}
+	}
+
+	@each $i in $fixedsizes {
+		.col--fixed#{$i} {
+			flex: 0 0 ($i * 1px);
+
+			@if $fixbugs {
+				width: ($i * 1px);     // fixed Safari
+				max-width: ($i * 1px); // fixed IE10
+			}
+
+			// assure fixed box size
+			// maybe no padding?
+			// padding: 0;
+
+			// maybe box-sizing: content-box?
+			box-sizing: content-box;
+		}
+	}
+
+	@each $i in $flexsizes {
+		.col--flex#{$i} {
+			flex-basis: ($i * 1%);
+
+			@if $fixbugs {
+				width: ($i * 1%);     // fixed Safari
+				max-width: ($i * 1%); // fixed IE10
+			}
+		}
+
+		.col--flex-push#{$i} {
+			margin-left: ($i * 1%);
+		}
+
+		.col--flex-pull#{$i} {
+			margin-left: ($i * -1%);
+		}
+	}
+
+
+	// ordering
+
+	.reverse-grid {
+		&.row {
+			flex-direction: row-reverse;
+		}
+		&.column {
+			flex-direction: column-reverse;
+		}
+	}
+
+	@for $i from 0 through 10 {
+		.col--order#{$i} {
+			order: $i;
+		}
+	}
+
+	.col--orderfirst {
+		order: -1;
+	}
+
+	.col--orderlast {
+		order: 999;
+	}
+}
