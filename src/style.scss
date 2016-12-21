@@ -1,128 +1,266 @@
+// CSS3 Flexbox Grid System
 
-// Grid System
-$fixedsizes: 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000; //, 236, 768;
-$flexsizes: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 25, 75;
-$activate-flexgrid-breakpoint: 600px; // breakpoint where flexbox is active
-$fixbugs: true;
-$gutter: 1rem;
-$stretch-only-childs: true;
+// Class naming
+$mg-rowname:             'row'             !default; // Flex Container: flex-direction: row;
+$mg-columnname:          'column'          !default; // Flex Container: flex-direction: column;
+$mg-colname:             'col'             !default; // Flex Item
+$mg-fixedmodname:        '--fixed'         !default; // Flex Item modifier postfix class name
+$mg-hasnestedgridname:   'has-nested-grid' !default; // Helper class for nested grids
 
-.col {
-	@if $gutter != 0 {
-		padding: ($gutter / 2);
+// Breakpoints
+$mg-breaks: (
+	--xs: 30em,
+	--sm: 48em,
+	--md: 64em,
+	--lg: 75em
+);
+
+// Breakpoint where flexbox behavoir is active (set to NULL if always on)
+$mg-activate-flex-break: map-get($mg-breaks, --xs)                         !default;
+
+// Total Gutter (is split in half for left/right)
+$mg-gutter:              1rem                                              !default;
+// minimal content width of a flex item (default 'min-content'). Example: 10em
+$mg-min-content-width:   'min-content'                                     !default;
+// List of px values for fixed sized flex items
+$mg-fixedsizes:          100, 200, 300, 400, 500, 600, 700, 800, 900, 1000 !default;
+// List of % values for flexible sized flex items
+$mg-flexsizes:           10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 25, 75   !default;
+// fix Flexbugs for IE10, Safari & Android
+$mg-fixbugs:             true                                              !default;
+// single flex items (without --fixed* class) should use full width
+$mg-stretch-only-childs: false                                              !default;
+
+
+.#{$mg-rowname},
+.#{$mg-columnname} {
+	@if $mg-activate-flex-break != NULL {
+
+		@media (min-width: $mg-activate-flex-break) {
+			display: flex;
+			height: 100%; // default way for 100% height flex-items children
+		}
+
+	} @else {
+		display: flex;
+		height: 100%; // default way for 100% height flex-items children
 	}
 }
 
-@media (min-width: $activate-flexgrid-breakpoint) {
+.#{$mg-columnname} {
+	flex-direction: column;
+}
 
-	.row,
-	.column {
+.#{$mg-colname} {
+	flex: 1 0 0%;
+	min-width: unquote($mg-min-content-width);
+
+	@if $mg-gutter != 0 {
+		padding: ($mg-gutter / 2);
+	}
+
+	@if $mg-stretch-only-childs {
+		&:only-child {
+			flex-basis: 100%;
+
+			@if $mg-fixbugs {
+				width: 100%;     // fixed Safari
+				max-width: 100%; // fixed IE10
+			}
+		}
+	}
+}
+
+.#{$mg-hasnestedgridname} {
+
+	> * {
+		@if $mg-gutter != 0 {
+			margin: ($mg-gutter / -2);
+		}
+	}
+
+	/* fallback for 100% height flex-items children (Safari, Android, IE) */
+	@if $mg-fixbugs {
 		display: flex;
-		height: 100%; /* default way for 100% height flex-items children */
-
-	}
-
-	.column {
 		flex-direction: column;
+
+		> * {
+			flex-grow: 1;
+		}
 	}
+}
 
-	.col {
-		flex: 1 0 0%;
-		min-width: min-content;
+@each $i in $mg-fixedsizes {
+	.#{$mg-colname}#{$mg-fixedmodname}#{$i} {
+		flex: 0 0 ($i * 1px);
 
-		@if $stretch-only-childs {
-			&:only-child {
-				flex-basis: 100%;
+		@if $mg-fixbugs {
+			width: ($i * 1px);     // fixed Safari
+			max-width: ($i * 1px); // fixed IE10
+		}
 
-				@if $fixbugs {
-					width: 100%;     // fixed Safari
-					max-width: 100%; // fixed IE10
+		// assure fixed box size
+		// maybe no padding?
+		// padding: 0;
+
+		// maybe box-sizing: content-box?
+		box-sizing: content-box;
+	}
+}
+
+// build responsive classes
+@each $breakname, $breaksize in $mg-breaks {
+	@media (min-width: $breaksize) {
+		@each $i in $mg-flexsizes {
+			.#{$mg-colname}#{$breakname}#{$i} {
+				flex: 1 0 ($i * 1%);
+
+				@if $mg-fixbugs {
+					width: ($i * 1%);     // fixed Safari
+					max-width: ($i * 1%); // fixed IE10
 				}
 			}
 		}
 	}
+}
 
-	.has-nested-grid {
-		border: none;
+// ordering
+.reverse-grid {
+	&.#{$mg-rowname} {
+		flex-direction: row-reverse;
+	}
+	&.#{$mg-columnname} {
+		flex-direction: column-reverse;
+	}
+}
 
+// build responsive classes
+@each $breakname, $breaksize in $mg-breaks {
+	@media (min-width: $breaksize) {
+		@for $i from 0 through 10 {
+			.#{$mg-colname}#{$breakname}-order#{$i} {
+				order: $i;
+			}
+		}
+	}
+}
+
+.#{$mg-colname}--orderfirst {
+	order: -1;
+}
+
+.#{$mg-colname}--orderlast {
+	order: 999;
+}
+
+
+%flex-grow0 {
+	flex-grow: 0;
+}
+%flex-basis0 {
+	flex-basis: 0;
+}
+
+// main positioning
+.main-center {
+	justify-content: center;
+
+	&.#{$mg-columnname} {
 		> * {
-			@if $gutter != 0 {
-				margin-left: ($gutter / -2);
-				margin-right: ($gutter / -2);
-			}
-		}
-
-		/* fallback for 100% height flex-items children (Safari, Android, IE) */
-		@if $fixbugs {
-			display: flex;
-			flex-direction: column;
-
-			> * {
-				flex-grow: 1;
-			}
+			@extend %flex-basis0;
 		}
 	}
 
-	@each $i in $fixedsizes {
-		.col--fixed#{$i} {
-			flex: 0 0 ($i * 1px);
+	> * {
+		@extend %flex-grow0;
+	}
+}
 
-			@if $fixbugs {
-				width: ($i * 1px);     // fixed Safari
-				max-width: ($i * 1px); // fixed IE10
-			}
+.main-start {
+	justify-content: flex-start;
 
-			// assure fixed box size
-			// maybe no padding?
-			// padding: 0;
-
-			// maybe box-sizing: content-box?
-			box-sizing: content-box;
+	&.#{$mg-columnname} {
+		> * {
+			@extend %flex-basis0;
 		}
 	}
 
-	@each $i in $flexsizes {
-		.col--flex#{$i} {
-			flex-basis: ($i * 1%);
+	> * {
+		@extend %flex-grow0;
+	}
+}
 
-			@if $fixbugs {
-				width: ($i * 1%);     // fixed Safari
-				max-width: ($i * 1%); // fixed IE10
-			}
-		}
+.main-end {
+	justify-content: flex-end;
 
-		.col--flex-push#{$i} {
-			margin-left: ($i * 1%);
-		}
-
-		.col--flex-pull#{$i} {
-			margin-left: ($i * -1%);
+	&.#{$mg-columnname} {
+		> * {
+			@extend %flex-basis0;
 		}
 	}
 
-
-	// ordering
-
-	.reverse-grid {
-		&.row {
-			flex-direction: row-reverse;
-		}
-		&.column {
-			flex-direction: column-reverse;
-		}
+	> * {
+		@extend %flex-grow0;
 	}
+}
 
-	@for $i from 0 through 10 {
-		.col--order#{$i} {
-			order: $i;
+.main-space-between {
+	justify-content: space-between;
+
+	&.#{$mg-columnname} {
+		> * {
+			@extend %flex-basis0;
 		}
 	}
 
-	.col--orderfirst {
-		order: -1;
+	> * {
+		@extend %flex-grow0;
+	}
+}
+
+.main-space-around {
+	justify-content: space-around;
+
+	&.#{$mg-columnname} {
+		> * {
+			@extend %flex-basis0;
+		}
 	}
 
-	.col--orderlast {
-		order: 999;
+	> * {
+		@extend %flex-grow0;
+	}
+}
+
+// cross positioning
+.cross-center {
+	align-items: center;
+
+	> * {
+		@extend %flex-grow0;
+	}
+}
+
+.cross-start {
+	align-items: flex-start;
+
+	> * {
+		@extend %flex-grow0;
+	}
+}
+
+.cross-end {
+	align-items: flex-end;
+
+	> * {
+		@extend %flex-grow0;
+	}
+}
+
+.cross-stretch {
+	align-items: stretch;
+
+	> * {
+		@extend %flex-grow0;
 	}
 }

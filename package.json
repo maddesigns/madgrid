@@ -1,0 +1,42 @@
+{
+  "name": "madgrid",
+  "version": "1.0.0",
+  "description": "CSS3 Flexbox Grid System",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch-sass": "node-sass -w --output-style expanded src/ -o demo/",
+    "sass": "node-sass --output-style expanded --include-path src < src/style.scss | postcss -u autoprefixer --autoprefixer.browsers 'last 2 versions, ie >= 10, Android >= 2.3, iOS > 8, Firefox ESR, > 2%' > dist/style.css",
+    "sass2": "node-sass --include-path src < src/style.scss | postcss -u autoprefixer --autoprefixer.browsers 'last 2 versions, ie >= 10, Android >= 2.3, iOS > 8, Firefox ESR, > 2%' -u cssnano > dist/style.min.css",
+    "cssmin": "postcss -u cssnano -r dist/style.min.css",
+    "start": "node bs-simple.js",
+    "build": "npm run sass && npm run sass2",
+    "watch:all": "parallelshell 'npm run watch-sass' 'npm start'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maddesigns/madgrid.git"
+  },
+  "keywords": [
+    "css3",
+    "flexbox",
+    "grid"
+  ],
+  "author": "Sven Wolfermann",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maddesigns/madgrid/issues"
+  },
+  "homepage": "https://github.com/maddesigns/madgrid#readme",
+  "dependencies": {
+    "autoprefixer": "latest",
+    "browser-sync": "latest",
+    "bs-html-injector": "latest",
+    "compression": "latest",
+    "cssnano": "latest",
+    "node-sass": "latest",
+    "parallelshell": "latest",
+    "postcss-cli": "latest",
+    "watch": "latest"
+  }
+}

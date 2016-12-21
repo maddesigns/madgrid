@@ -14,7 +14,9 @@
 			*:after {
 				box-sizing: inherit;
 			}
-
+			html, body {
+			  height: 100%;
+			}
 			html {
 				/* neccessary for responsiveness */
 				box-sizing: border-box;
@@ -34,7 +36,6 @@
 				max-width: 960px;
 				margin-left: auto;
 				margin-right: auto;
-				//overflow: hidden;
 			}
 
 			.u-oh {
@@ -42,12 +43,9 @@
 			}
 
 			.col {
-				/* demo */
-				-webkit-box-shadow: inset 0 0 0 1px #aaa;
-						box-shadow: inset 0 0 0 1px #aaa;
-				background-color: rgba(170, 170, 170, 0.4);
-				min-height: 100px;
+				background-color: rgba(255,0,0,0.3);
 			}
+
 		</style>
 	</head>
 	<body>
@@ -55,44 +53,87 @@
 
 <div class="wrapper">
 	<div class="row">
-		<div class="col">- SPACER -</div>
+		<div class="col" style="background-color: #92b8d4;">- SPACER -</div>
 	</div>
 
 	<div class="row">
-		<div class="col col--flex50">
+		<div class="col col--sm30 col--md80 col--lg40" style="background-color: #e7b955;">
 			<img src="https://source.unsplash.com/category/nature/800x450" alt="50% - IMAGE -" />
 		</div>
-		<div class="col col--flex50">
+		<div class="col col--sm70 col--md20 col--lg60" style="background-color: #da894f;">
 			50% - HEADER - Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi sapiente natus repellendus doloremque blanditiis placeat consequatur nihil quasi, cumque quis, tenetur eveniet architecto ad, saepe tempore doloribus neque. Cumque, iusto! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro quae doloremque doloribus molestiae, tempore quibusdam, deleniti nemo, voluptate vero minus ad. Quasi est voluptate minima fuga deserunt modi tempore accusantium.
 		</div>
 	</div>
 
 	<div class="row u-oh">
-		<div class="col col--fixed200">
-			<img src="https://source.unsplash.com/category/nature/200x150" alt="200px fixed - SPACER -" />
+		<div class="col col--fixed200 col--md-order3" style="background-color: #8a8d8a;">
+			<img src="https://source.unsplash.com/category/nature/200x150" width="200" alt="200px fixed - SPACER -" />
 		</div>
-		<div class="col col--auto">
-			- CONTENT - auto
+		<div class="col col--orderfirst" style="background-color: #709b9e;">
+			- CONTENT - auto Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
 		</div>
-		<div class="col col--fixed400">
-			<img src="https://source.unsplash.com/category/nature/800x450" alt="200px fixed - SPACER -" />
+		<div class="col col--fixed400 col--lg-order1" style="background-color: #7b73a5;">
+			<img src="https://source.unsplash.com/category/nature/800x450" width="400" alt="200px fixed - SPACER -" />
 		</div>
 	</div>
 
 	<div class="row">
-		<div class="col col--flex70 has-nested-grid">
+		<div class="col col--sm70 has-nested-grid"  style="background-color: yellow;">
 			<div class="column">
 				<div class="col">50% - HEADER - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-				tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-				quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-				consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-				cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-				proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</div>
-				<div class="col">50% - RICHTEXT -</div>
+					tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+					quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+					consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+					cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+					proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				</div>
+				<div class="col has-nested-grid">
+					<div class="row">
+						<div class="col">50% - HEADER - Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+							tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+							quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+							consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+							cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+							proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+						</div>
+						<div class="col has-nested-grid">
+							<div class="row">
+								<div class="col has-nested-grid">
+									<div class="column">
+										<div class="col">
+											<img src="https://source.unsplash.com/category/nature/800x450" alt="50% - IMAGE -" />
+										</div>
+										<div class="col">
+											50% - HEADER - Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+										</div>
+									</div>
+								</div>
+								<div class="col">
+									50% - HEADER - Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="col col--flex30" style="min-height: 300px">
+		<div class="col col--sm30" style="min-height: 300px; background-color: #ae7392;">
 			<img src="https://source.unsplash.com/category/nature/450x800" alt="30% - IMAGE -" />
+		</div>
+	</div>
+
+
+	<div class="row u-oh main-space-between cross-center" style="height: 550px; border: 1px solid #aaa; margin: 2rem 0">
+		<div class="col col--fixed200" style="background-color: #8a8d8a;">
+			<img src="https://source.unsplash.com/category/nature/200x150" width="200" alt="200px fixed - SPACER -" />
+		</div>
+		<div class="col" style="background-color: #709b9e;">
+			- CONTENT - auto Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+			tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
+		</div>
+		<div class="col col--fixed400" style="background-color: #7b73a5;">
+			<img src="https://source.unsplash.com/category/nature/800x450" width="400" alt="200px fixed - SPACER -" />
 		</div>
 	</div>
 </div>
